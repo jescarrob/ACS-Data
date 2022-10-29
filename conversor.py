@@ -8,7 +8,7 @@ import sqlite3 as sq
 
 def conversor(file):
 
-    data = pd.read_excel(file)
+    data = pd.read_excel('archivos/'+file)
 
     hora = np.array(data['Hora'])
     index=0
