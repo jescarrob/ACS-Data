@@ -13,7 +13,6 @@ def conversor(file):
     hora = np.array(data['Hora'])
     index=0
     for elem in hora:
-        #nuevo = elem.replace('\n','')
         hora[index]= datetime.strptime(elem,'%Y-%m-%d \n%H:%M:%S')
         index+=1
 
@@ -57,6 +56,7 @@ def conversor(file):
     # Importamos a la db
     conn = sq.connect('data.db')
     cursor = conn.cursor()
+    i=0 #Contador
 
     for index in datos.index:
 
@@ -67,17 +67,18 @@ def conversor(file):
         salida = datos.loc[index,'Salida']
 
         d = str(hora),cap,volt,entrada,salida
-        print(d)
-        #try:
-        cursor.execute(f'INSERT INTO DATA VALUES ("{hora}",{cap},{volt},{entrada},{salida})')
-        print(index)
-        #except: print('Ya existe ese dato')
+        
+        try:
+            cursor.execute(f'INSERT INTO DATA VALUES ("{hora}",{cap},{volt},{entrada},{salida})')
+            i+=1
+        except: print('Ya existe ese dato')
+
     conn.commit()
     cursor.close()
     conn.close()
-
+    
+    print(f'Datos introducidos en la base de datos. {i} registros nuevos')
 
 
 file = input('Introduzca el nombre del archivo: ')
-
 conversor(file)
